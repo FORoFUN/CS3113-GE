@@ -1,0 +1,7 @@
+﻿  main.cpp
+c:\users\wxy52\desktop\file\cs\3113\hw01\nyucodebase\main.cpp(90): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\hw01\nyucodebase\main.cpp(91): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\hw01\nyucodebase\main.cpp(131): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\hw01\nyucodebase\main.cpp(134): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\hw01\nyucodebase\main.cpp(139): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+  NYUCodebase.vcxproj -> C:\Users\wxy52\Desktop\File\CS\3113\hw01\Debug\NYUCodebase.exe

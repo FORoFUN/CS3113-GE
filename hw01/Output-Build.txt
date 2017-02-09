@@ -1,0 +1,4 @@
+﻿1>------ Build started: Project: NYUCodebase, Configuration: Debug Win32 ------
+1>  main.cpp
+1>LINK : fatal error LNK1168: cannot open C:\Users\wxy52\Desktop\File\CS\3113\hw01\Debug\NYUCodebase.exe for writing
+========== Build: 0 succeeded, 1 failed, 0 up-to-date, 0 skipped ==========
