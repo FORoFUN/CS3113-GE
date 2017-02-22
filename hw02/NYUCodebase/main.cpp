@@ -71,6 +71,11 @@ public:
 	float width = 0.5;
 	float height = 0.5;
 
+	//movment		
+	float speed = 2.5f; //speed of center, subjective to change
+	float direct_x = 0.0f;
+	float direct_y = 0.0f;
+
 	//collision information
 	float Left_side;
 	float Right_side;
@@ -224,8 +229,8 @@ int main(int argc, char *argv[]) {
 		modelMatrix.identity();
 		modelMatrix.Translate(0, Left.direction_y, 0);
 
-		Left.Top = Left.direction_y + Left.height;
-		Left.Bot = Left.direction_y - Left.height;
+		Left.Top = Left.direction_y + Left.height / 2;
+		Left.Bot = Left.direction_y - Left.height / 2;
 		Left.Left_side = Left.x;
 		Left.Right_side = Left.x + Left.width;
 
@@ -255,8 +260,8 @@ int main(int argc, char *argv[]) {
 		modelMatrix.identity();
 		modelMatrix.Translate(0, Right.direction_y, 0);
 
-		Right.Top = Right.direction_y + Right.height;
-		Right.Bot = Right.direction_y - Right.height;
+		Right.Top = Right.direction_y + Right.height / 2;
+		Right.Bot = Right.direction_y - Right.height / 2;
 		Right.Left_side = Right.x - Right.width;
 		Right.Right_side = Right.x;
 
@@ -285,16 +290,14 @@ int main(int argc, char *argv[]) {
 		//Center, ball
 		//reset identity so it does not move along previous Matrix movements
 		modelMatrix.identity();
-		Center.x += Center.x * elapsed * dir_x;
-		Center.y += Center.y * elapsed * dir_y;
 
-		Center.Top = Center.y + Center.height / 2;
-		Center.Bot = Center.y - Center.height / 2;
-		Center.Left_side = Center.x + Center.width / 2;
-		Center.Right_side = Center.x + Center.width / 2;
+		Center.direct_x += Center.x * elapsed * dir_x * Center.speed;
+		Center.direct_y += Center.y * elapsed * dir_y * Center.speed;
 
-		bool CollisionTest = false;
-		CollisionTest = Collision(Center, Left, Right);
+		Center.Top = Center.direct_y + Center.height / 2;
+		Center.Bot = Center.direct_y - Center.height / 2;
+		Center.Left_side = Center.direct_x + Center.width / 2;
+		Center.Right_side = Center.direct_x + Center.width / 2;
 
 		if (Center.Top > 3) {
 			dir_y *= -1;
@@ -302,18 +305,17 @@ int main(int argc, char *argv[]) {
 		else if (Center.Bot < -3) {
 			dir_y *= -1;
 		}
-		else if (CollisionTest) {
+		else if (Collision(Center, Left, Right)) {
 			dir_x *= -1;
-			CollisionTest = false;
 		}
 		else if (Center.Left_side < -5.33) {
 			winning = 2;
 		}
-		else if (Center.Left_side > 5.33) {
+		else if (Center.Right_side > 5.33) {
 			winning = 1;
 		}
 
-		modelMatrix.Translate(Center.x, Center.y, 1);
+		modelMatrix.Translate(Center.direct_x, Center.direct_y, 1);
 		program.setModelMatrix(modelMatrix);
 
 		//blinding new texture
