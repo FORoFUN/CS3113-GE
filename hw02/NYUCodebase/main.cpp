@@ -31,22 +31,20 @@ using namespace std;
 
 SDL_Window* displayWindow;
 
-//input image
-
-class Paddle { //some varialbes can be private, will deal later
+//Could've been entity class, but separated into two because of functionality
+//Also, this code can be modified further to improve each class
+class Paddle {
 public:
-	Paddle(float position, GLuint picture) : x(position),
-		textureID(picture) {};
+	Paddle(float position, GLuint picture) : x(position), textureID(picture) {};
 
 	//initial position
-	float x; //depending positive or negative
-	float y = 0.0f;
-
+	float x;
+	float y = 0.0f; //middle
 	GLuint textureID;
 
 	//object information
 	float width = 2.0f;
-	float height = 1.5f;
+	float height = 2.0f;
 
 	float Left_side;
 	float Right_side;
@@ -56,7 +54,7 @@ public:
 	//movement
 	float speed = 3.5f;
 	float direction_y = 0.0f; //up and down
-	float direction_x = 0.0f; //only move up and down
+	const float direction_x = 0.0f; //constant
 };
 
 class Pong { //a similar class with collision and moving 45 angle
@@ -65,14 +63,15 @@ public:
 
 	//initial
 	float angle;
-	float speed = 0.75f;
-	float x = cos(angle) * speed; //depending positive or negative
-	float y = sin(angle) * speed;
+	float x = cos(angle);
+	float y = sin(angle);
 	GLuint textureID;
 
+	//object information
 	float width = 0.5;
 	float height = 0.5;
 
+	//collision information
 	float Left_side;
 	float Right_side;
 	float Top;
@@ -116,8 +115,12 @@ void setup() {
 
 }
 
+//There are corner cases for Collision which will not taken into consideration
 bool Collision(Pong ball, Paddle left, Paddle right) {
 	//if any of these are false, we hit each other
+	//Collision checked
+	//right side to right paddle's left
+	//left side to left paddle's right
 	if (!(ball.Bot > right.Top ||
 		ball.Top < right.Bot ||
 		ball.Right_side < right.Left_side)) {
@@ -129,7 +132,6 @@ bool Collision(Pong ball, Paddle left, Paddle right) {
 		ball.Left_side > left.Right_side)) {
 		return true;
 	}
-	
 	return false;
 }
 
@@ -158,11 +160,10 @@ int main(int argc, char *argv[]) {
 
 	//units initiation
 	float lastFrameTicks = 0.0f;
-	int dir_y = 1;
-	int dir_x = 1;
-	int winning = 0;
+	int dir_y = 1;//pos, vector + direction
+	int dir_x = 1;//pos, vector + direction
+	int winning = 0;//keep track
 
-	//frame refreashing rate
 	bool done = false;
 	while (!done) {
 		//time track per frame
@@ -179,7 +180,9 @@ int main(int argc, char *argv[]) {
 
 		//background clear and color
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		//A winning condition is met
+		//Red for player 1; Blue for player 2
 		if (winning == 1) {
 			glClearColor(1.0, 0.0, 0.0, 1.0);
 		}
@@ -220,10 +223,12 @@ int main(int argc, char *argv[]) {
 		//Left Paddle Red
 		modelMatrix.identity();
 		modelMatrix.Translate(0, Left.direction_y, 0);
-		Left.Top = Left.y + Left.height / 2;
-		Left.Bot = Left.y - Left.height / 2;
-		Left.Left_side = Left.x + Left.width / 2;
-		Left.Right_side = Left.x + Left.width / 2;
+
+		Left.Top = Left.direction_y + Left.height;
+		Left.Bot = Left.direction_y - Left.height;
+		Left.Left_side = Left.x;
+		Left.Right_side = Left.x + Left.width;
+
 		program.setModelMatrix(modelMatrix);
 		glBindTexture(GL_TEXTURE_2D, Left.textureID);
 		//coordinates top_right, top_left, bot_left, top_right, bot_left, bot_right
@@ -249,10 +254,12 @@ int main(int argc, char *argv[]) {
 		//Right Paddle Blue
 		modelMatrix.identity();
 		modelMatrix.Translate(0, Right.direction_y, 0);
-		Right.Top = Right.y + Right.height / 2;
-		Right.Bot = Right.y - Right.height / 2;
-		Right.Left_side = Right.x + Right.width / 2;
-		Right.Right_side = Right.x + Right.width / 2;
+
+		Right.Top = Right.direction_y + Right.height;
+		Right.Bot = Right.direction_y - Right.height;
+		Right.Left_side = Right.x - Right.width;
+		Right.Right_side = Right.x;
+
 		program.setModelMatrix(modelMatrix);
 		float vertices_A[] = {
 			Right.x,Right.y + Right.height,
@@ -286,14 +293,18 @@ int main(int argc, char *argv[]) {
 		Center.Left_side = Center.x + Center.width / 2;
 		Center.Right_side = Center.x + Center.width / 2;
 
+		bool CollisionTest = false;
+		CollisionTest = Collision(Center, Left, Right);
+
 		if (Center.Top > 3) {
 			dir_y *= -1;
 		}
 		else if (Center.Bot < -3) {
 			dir_y *= -1;
 		}
-		else if (Collision(Center,Left,Right)) {
+		else if (CollisionTest) {
 			dir_x *= -1;
+			CollisionTest = false;
 		}
 		else if (Center.Left_side < -5.33) {
 			winning = 2;
