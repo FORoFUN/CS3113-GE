@@ -1,0 +1,6 @@
+﻿  main.cpp
+c:\users\wxy52\desktop\file\cs\3113\final_project_dance_floor! 2.0v\nyucodebase\nyucodebase\main.cpp(217): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\final_project_dance_floor! 2.0v\nyucodebase\nyucodebase\main.cpp(418): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\final_project_dance_floor! 2.0v\nyucodebase\nyucodebase\main.cpp(434): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wxy52\desktop\file\cs\3113\final_project_dance_floor! 2.0v\nyucodebase\nyucodebase\main.cpp(700): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+  NYUCodebase.vcxproj -> C:\Users\wxy52\Desktop\File\CS\3113\Final_Project_Dance_Floor! 2.0v\NYUCodebase\Debug\NYUCodebase.exe
