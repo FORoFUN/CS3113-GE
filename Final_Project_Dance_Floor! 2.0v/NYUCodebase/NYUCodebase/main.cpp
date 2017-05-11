@@ -415,7 +415,8 @@ void healthbar_C() {
 void healthbar_E() {
 	modelMatrix.identity();
 	modelMatrix.Translate(1.3f, 3.0f, 0.0f);
-	float damage = 1 - (hit / Max_Health_E);
+	float damage = 1.0f - ((float)hit / (float)Max_Health_E);
+
 	modelMatrix.Scale(4.5f * damage, 0.8f, 1.0f);
 
 	untextured_program->setModelMatrix(modelMatrix);
@@ -431,7 +432,7 @@ void healthbar_E() {
 
 	glUseProgram(untextured_program->programID);
 
-	glUniform4f(color_uniform, 1.0f, 0.0f, 0.0f, (Max_Health_E - hit) / Max_Health_E);
+	glUniform4f(color_uniform, 1.0f, 0.0f, 0.0f, damage);
 
 	glEnableVertexAttribArray(untextured_program->positionAttribute);
 	glVertexAttribPointer(untextured_program->positionAttribute, 2, GL_FLOAT, false, 0, vert);
@@ -947,9 +948,11 @@ int main(int argc, char *argv[])
 					playing = true;
 				}
 			}
-			if (on_beat_release(lastBox)) {
-				generatebox();
-				nth_beat += 1;
+			if (on_beat_release(lastBox)){
+				nth_beat += 4 / Level;
+				if (nth_beat < music_beats.size()) {
+					generatebox();
+				}
 			}
 		}
 
